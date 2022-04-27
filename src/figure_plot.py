@@ -14,6 +14,15 @@ base_color = 'gray'
 iDSE_color = 'black'
 dpi_set = 100
 
+import global_setting
+area_mode = global_setting.get_global_var('area_mode')
+bench_indivisual_model = global_setting.get_global_var('bench_indivisual_model')
+simpoint_id = global_setting.get_global_var('simpoint_id')
+sample_num = global_setting.get_global_var('sample_num')
+sample_id = global_setting.get_global_var('sample_id')
+BENCH_SIMPOINT_INDEX = global_setting.get_global_var('BENCH_SIMPOINT_INDEX')
+CASE_VERSION_INDEX = global_setting.get_global_var('CASE_VERSION_INDEX')
+
 def get_pareto_curve(points_x_pareto_opt, points_y_pareto_opt):
     curve_y = [points_y_pareto_opt[0]]
     for interval_id in range(1, len(points_x_pareto_opt)):
@@ -170,6 +179,7 @@ def plot_pareto_optimality_all():
 
 def output_fig(X_1, Y_1, X_2, Y_2, X_3, Y_3, X_4, Y_4, fig_name, epoch_print_min=0, CPI_mode = 1):
     epoch_print_min = 10
+    test_fig_mode = 0
     if test_fig_mode:
         X_1_print = X_1[epoch_print_min:]
         Y_1_print = Y_1[epoch_print_min:]

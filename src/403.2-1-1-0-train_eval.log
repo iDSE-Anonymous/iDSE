@@ -1,0 +1,13 @@
+train_y_label_hit_num= 0
+train_data_size = 25
+train_data_size_opt = 25
+eval_data_size = 18
+input_length = 55
+output_length = 1
+Training Epoch 0, cpi: 1.567571563720703, opt_Loss cpi: 1.8245602416992188, test: 1.9301102956136067, test opt: 1.502047856648763
+0:00:00
+CPI mode time_used: 0:00:00, epoch 2, validation loss 1.926242192586263, opt epoch 1, opt validation loss 1.502047856648763
+
+Training Epoch 0, power: 4.474771118164062 , opt_Loss power: 9.779511108398438, test: 11.48539310031467 , test opt: 6.487544165717231
+power mode time_used: 0:00:00, epoch 2, validation loss 11.226531982421875, opt epoch 2 , opt validation loss 6.17400402492947
+all_time_used: 0:00:01

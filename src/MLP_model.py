@@ -2,6 +2,19 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+import global_setting
+area_mode = global_setting.get_global_var('area_mode')
+bench_indivisual_model = global_setting.get_global_var('bench_indivisual_model')
+simpoint_id = global_setting.get_global_var('simpoint_id')
+sample_num = global_setting.get_global_var('sample_num')
+sample_id = global_setting.get_global_var('sample_id')
+BENCH_ID_INDEX = global_setting.get_global_var('BENCH_ID_INDEX')
+BENCH_SIMPOINT_INDEX = global_setting.get_global_var('BENCH_SIMPOINT_INDEX')
+CASE_VERSION_INDEX = global_setting.get_global_var('CASE_VERSION_INDEX')
+
+import read_input
+from read_input import *
+
 class Loss_Fun(nn.Module):
     def __init__(self):
         super(Loss_Fun, self).__init__()
@@ -301,7 +314,7 @@ class MLP_Predictor(nn.Module):
         cdf_file.close()
 
         print(CPI_mode_str + ' 5\% coverage error_limit=' + str(error_limit))
-        log_file.write(CPI_mode_str + ' 5\% coverage error_limit=' + str(error_limit) + '\n')
+        #log_file.write(CPI_mode_str + ' 5\% coverage error_limit=' + str(error_limit) + '\n')
         return error_cdf
 
 class MLP_Predictor_2(nn.Module):
@@ -593,5 +606,5 @@ class MLP_Predictor_2(nn.Module):
             cdf_file.write(str(interval_id) + ' ' + str(interval_id * error_interval) + ' '+ str(cdf_err) + ' \n')
         cdf_file.close()            
         print(CPI_mode_str + ' 5\% coverage error_limit=' + str(error_limit))
-        log_file.write(CPI_mode_str + ' 5\% coverage error_limit=' + str(error_limit) + '\n')
+        #log_file.write(CPI_mode_str + ' 5\% coverage error_limit=' + str(error_limit) + '\n')
         return error_cdf

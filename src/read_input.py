@@ -1,11 +1,21 @@
 import os
 import numpy as np
+import copy
+import math
+from sklearn import preprocessing
+
+import global_setting
+area_mode = global_setting.get_global_var('area_mode')
+bench_indivisual_model = global_setting.get_global_var('bench_indivisual_model')
+simpoint_id = global_setting.get_global_var('simpoint_id')
+sample_num = global_setting.get_global_var('sample_num')
+sample_id = global_setting.get_global_var('sample_id')
+BENCH_SIMPOINT_INDEX = global_setting.get_global_var('BENCH_SIMPOINT_INDEX')
+CASE_VERSION_INDEX = global_setting.get_global_var('CASE_VERSION_INDEX')
+inst_radio_mode = global_setting.get_global_var('inst_radio_mode')
 
 input_length_max = 0
-area_mode = 0
 simpoint_mode = 1
-
-bench_indivisual_model = '403.2'
 
 CASE_MAX_NUM = 52
 #416.1/2/3 is ignored due to compiler error
@@ -480,7 +490,7 @@ def data_loader(data_path):
         if inst_radio_mode:
             bench_soft_info_length += 5 #inst_radio length
         print('bench_soft_info_length = ' + str(bench_soft_info_length))
-        log_file.write('bench_soft_info_length = ' + str(bench_soft_info_length) + '\n')
+        #log_file.write('bench_soft_info_length = ' + str(bench_soft_info_length) + '\n')
     else:
         bench_soft_info_length = 0
     
@@ -561,8 +571,9 @@ def data_loader(data_path):
                 #log_file.write(bench_file + ' ' + bench_labels[case_iter][CASE_VERSION_INDEX] + ' collect\n')
 
     print('case_length = ' + str(case_length))
-    log_file.write('case_length = ' + str(case_length) + '\n')            
+    #log_file.write('case_length = ' + str(case_length) + '\n')            
     #case_length_real  = case_length - len(input_mask_array)
+    input_enable = 0
     if input_enable:
         case_length_real = len(input_enable_array)
     else:
@@ -570,14 +581,14 @@ def data_loader(data_path):
         #case_length_real = case_length
     #case_length_real = len(bench_cases[0])
     print('case_length_real = ' + str(case_length_real))
-    log_file.write('case_length_real = ' + str(case_length_real) + '\n')
+    #log_file.write('case_length_real = ' + str(case_length_real) + '\n')
 
     print('data cases num all = ' + str(case_num_all))
-    log_file.write('data cases num all = ' + str(case_num_all) + '\n')
+    #log_file.write('data cases num all = ' + str(case_num_all) + '\n')
     assert(0 < case_num_all)
     case_num = len(final_data)
     print('data cases num = ' + str(case_num))
-    log_file.write('data cases num = ' + str(case_num) + '\n')
+    #log_file.write('data cases num = ' + str(case_num) + '\n')
     assert(0 < case_num)
     output_bench_info()
     input_length = case_length_real + bench_soft_info_length

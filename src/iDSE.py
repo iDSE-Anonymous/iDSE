@@ -7,37 +7,25 @@ import random
 import time
 import math
 from datetime import datetime
-import heapq
 
-#bench_indivisual_model = None
-#bench_indivisual_model = '400.1'
-#bench_indivisual_model = '483.1'
-
-bench_indivisual_model = '403.2'
-#bench_indivisual_model = '473.1'
-simpoint_id = 1
-sample_num = 1
-sample_id = 20
-sample_id_max = sample_id
-
-gen_choose_list_flag = 0
-choose_from_dsp = 1
-
-BENCH_ID_INDEX = 0
-BENCH_SIMPOINT_INDEX = BENCH_ID_INDEX + 1
-CASE_VERSION_INDEX = BENCH_SIMPOINT_INDEX + 1
-
-#CPI_mode = 1
-area_mode = 0
-input_enable = 0
-inst_radio_mode = 1
-test_fig_mode = 0
+import global_setting
+global_setting._init()
+area_mode = global_setting.get_global_var('area_mode')
+bench_indivisual_model = global_setting.get_global_var('bench_indivisual_model')
+simpoint_id = global_setting.get_global_var('simpoint_id')
+sample_num = global_setting.get_global_var('sample_num')
+sample_id = global_setting.get_global_var('sample_id')
+BENCH_SIMPOINT_INDEX = global_setting.get_global_var('BENCH_SIMPOINT_INDEX')
+CASE_VERSION_INDEX = global_setting.get_global_var('CASE_VERSION_INDEX')
 
 import read_input
 from read_input import *
 import key_point_generation
+from key_point_generation import *
 import MLP_model
+from MLP_model import *
 import figure_plot
+from figure_plot import *
 
 log_name = ''
 if bench_indivisual_model:
@@ -129,8 +117,8 @@ def main():
         if bench_choose_opt:
 
             train_data_size_opt_limit = sample_id * 25
-            if choose_from_dsp and 1 < sample_id:
-                train_data_size_opt_limit = 1000 #sample_id * 25
+            #if choose_from_dsp and 1 < sample_id:
+            #    train_data_size_opt_limit = 1000 #sample_id * 25
 
             if area_mode:
                 pareto_optimality_perfect_filename = 'area-pareto_optimality_perfect.txt'
@@ -219,12 +207,7 @@ def main():
             eval_cpi_data = final_cpi_labels
             eval_power_data = final_power_labels
             eval_y_label = real_y_label_array
-        else:
-            eval_data_size = batch_number - train_data_size
-            eval_data = all_input[train_data_size:]
-            eval_cpi_data = final_cpi_labels[train_data_size:]
-            eval_power_data = final_power_labels[train_data_size:]
-            eval_y_label = real_y_label_array[train_data_size:]
+
         #eval_data = all_input
         #eval_y_label = real_y_label_array
 
@@ -521,9 +504,8 @@ def main():
     #fig_name += '_cases-' + str(batch_number)
 
     #cdf_enable = 1
-    if demo:
-        cdf_enable = 0
     if cdf_enable:
+        print('cdf output --------------------------------------------------------------------------------------')
         error_interval = 0.01
         error_max = 0.1
         if bench_choose_opt:
@@ -561,6 +543,7 @@ def main():
 
     train_loss_fig = 0
     if train_loss_fig:
+        print('train_loss_fig --------------------------------------------------------------------------------------')
         if bench_choose_opt:
             if cpi_mode_train:
                 output_fig(train_loss_vector_epoch, train_loss_vector
@@ -589,8 +572,6 @@ def main():
         #output_fig(validation_loss_vector_epoch, validation_loss_vector, 'predictor.png', 50)
 
     perfect = 1
-    if demo:
-        perfect = 0
     if perfect:
         if area_mode:
             pareto_optimality_perfect_filename = 'area-pareto_optimality_perfect.txt'
@@ -670,11 +651,6 @@ if __name__ == '__main__':
         exit(0)
     try:
         main()
-        plot_pareto_optimality(None, None, None)
-        if 1:
-            plt_cdf(None, None, None, None, None, CPI_mode = 1)
-            plt_cdf(None, None, None, None, None, CPI_mode = 0)
-            #exit(0)
     except:
         print('main except')
     log_file.close()

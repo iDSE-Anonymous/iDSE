@@ -1,3 +1,25 @@
+import heapq
+import torch
+import numpy as np
+
+import global_setting
+area_mode = global_setting.get_global_var('area_mode')
+bench_indivisual_model = global_setting.get_global_var('bench_indivisual_model')
+simpoint_id = global_setting.get_global_var('simpoint_id')
+sample_num = global_setting.get_global_var('sample_num')
+sample_id = global_setting.get_global_var('sample_id')
+BENCH_ID_INDEX = global_setting.get_global_var('BENCH_ID_INDEX')
+BENCH_SIMPOINT_INDEX = global_setting.get_global_var('BENCH_SIMPOINT_INDEX')
+CASE_VERSION_INDEX = global_setting.get_global_var('CASE_VERSION_INDEX')
+inst_radio_mode = global_setting.get_global_var('inst_radio_mode')
+
+gen_choose_list_flag = 0
+choose_from_dsp = 1
+
+import read_input
+from read_input import *
+import figure_plot
+from figure_plot import write_error
 
 def choose_runned_case2(choose_limit, all_input, cpi_label, power_label, y_label, real_pareto_points_config):
     choose_case = []
@@ -10,7 +32,6 @@ def choose_runned_case2(choose_limit, all_input, cpi_label, power_label, y_label
     bench_file = bench_indivisual_model + '-ref-' + str(simpoint_id)
     [bench_id, simpoint_id] = get_bench_id(bench_file)
     runned_config_list_choose = gen_choose_list(bench_name, bench_id, simpoint_id, y_label, real_pareto_points_config)
-    #choose_limit = int(len(y_label) * 0.9)
     choose_one_in_pareto = 0
     for choose_one in runned_config_list_choose:
         found = 0
@@ -303,7 +324,7 @@ def gen_version_choose(DISPATCH_WIDTH_index, exe_int, exe_fp, lsq, dcache, icach
     version_str += version_iter
   return version_str
 
-  def pareto_optimality(models, final, pareto_points, sample_id, train_final, opt, area_mode):
+def pareto_optimality(models, final, pareto_points, sample_id, train_final, opt, area_mode):
     if bench_indivisual_model is not None:
         bench_id = 0
         for bench_name_cmp in bench_array:
@@ -329,25 +350,12 @@ def gen_version_choose(DISPATCH_WIDTH_index, exe_int, exe_fp, lsq, dcache, icach
 
     data_dsp_raw = []
     data_area = []
-    if 0:
-        [pareto_points_x, pareto_points_y, points_config, sample_num_i] = pareto_points
-        for config in points_config:
-            data_row = copy.deepcopy(hw_sf_data)
-            try:
-                for config_match in configs_all:
-                    if config_match['name'] == config:
-                        input_transform(data_row, config_match['params'])
-                        data_dsp_raw.append(data_row)
-                        data_area.append(config_match['area'])
-                        break
-            except:
-                print(config + 'unmatch')
-    else:
-        for config in configs_all:
-            data_row = copy.deepcopy(hw_sf_data)
-            input_transform(data_row, config['params'])
-            data_dsp_raw.append(data_row)
-            data_area.append(config['area'])
+
+    for config in configs_all:
+        data_row = copy.deepcopy(hw_sf_data)
+        input_transform(data_row, config['params'])
+        data_dsp_raw.append(data_row)
+        data_area.append(config['area'])
 
     [data_dsp, min_max_scaler] = data_preprocess(data_dsp_raw)
     input_length = len(data_dsp[0])
@@ -435,6 +443,7 @@ def get_pareto_point(filename, cpi_dsp, power_dsp, configs, pareto_points, final
     assert(len(cpi_dsp) == len(configs))
     assert(len(power_dsp) == len(configs))
 
+    demo = 0
     if 0 == mode:
         #[final_cpi_labels, final_power_labels, real_y_label_array] = final
         if 0 == demo:
@@ -539,7 +548,7 @@ def get_pareto_point(filename, cpi_dsp, power_dsp, configs, pareto_points, final
     #os.system(cmd_str.decode('utf-8'))
     if 0 == mode:
         print(filename + ': pareto_points_hit_num/all = ' + str(pareto_points_hit_num) + ' / ' + str(len(points_config)) + ' \n')
-        log_file.write(filename + ': pareto_points_hit_num/all = ' + str(pareto_points_hit_num) + ' / ' + str(len(points_config)) + ' \n')
+        #log_file.write(filename + ': pareto_points_hit_num/all = ' + str(pareto_points_hit_num) + ' / ' + str(len(points_config)) + ' \n')
         hit_file = open('log/hit.log', 'a')
         hit_file.write(filename + ' ' + str(sample_num) + ' : pareto_points_hit_num/all = ' + str(pareto_points_hit_num) + ' / ' + str(len(points_config)) + ' \n')
         hit_file.close()

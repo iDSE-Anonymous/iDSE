@@ -38,3 +38,7 @@ dsp_cpi_power___403.2-1-19.txt 200 : pareto_points_hit_num/all = 3 / 18
 dsp_cpi_power__opt_403.2-1-19.txt 200 : pareto_points_hit_num/all = 17 / 18 
 dsp_cpi_power___403.2-1-20.txt 203 : pareto_points_hit_num/all = 2 / 18 
 dsp_cpi_power__opt_403.2-1-20.txt 203 : pareto_points_hit_num/all = 15 / 18 
+dsp_cpi_power___403.2-1-1.txt 1 : pareto_points_hit_num/all = 0 / 18 
+dsp_cpi_power__opt_403.2-1-1.txt 1 : pareto_points_hit_num/all = 5 / 18 
+dsp_cpi_power___403.2-1-1.txt 1 : pareto_points_hit_num/all = 0 / 18 
+dsp_cpi_power__opt_403.2-1-1.txt 1 : pareto_points_hit_num/all = 5 / 18 
